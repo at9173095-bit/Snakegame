@@ -5,7 +5,7 @@ const scoreElement = document.getElementById("score");
 const highScoreElement = document.getElementById("high-score");
 const restartBtn = document.getElementById("restartBtn");
 
-const gridSize = 20;
+const gridSize = 10;
 const tileCount = canvas.width / gridSize;
 
 let snake;
@@ -36,6 +36,7 @@ function initGame(){
     clearInterval(window.gameLoop);
 
     window.gameLoop = setInterval(main,100);
+    canvas.focus();
 }
 
 function main(){
@@ -81,6 +82,11 @@ function moveSnake(){
     if(head.x===food.x && head.y===food.y){
 
         score += 10;
+        if(score > highScore){
+            highScore = score;
+            localStorage.setItem("snakeHighScore", highScore);
+            highScoreElement.textContent = highScore;
+        }
         scoreElement.textContent = score;
 
         generateFood();
@@ -147,7 +153,7 @@ function setDirection(dir){
     }
 }
 
-document.addEventListener("keydown",(e)=>{
+window.addEventListener("keydown",(e)=>{
 
     if(e.key==="ArrowLeft") setDirection("left");
     if(e.key==="ArrowRight") setDirection("right");
